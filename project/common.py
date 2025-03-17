@@ -25,7 +25,7 @@ def decode_access_token(token):
 
 
 def get_current_user(token: str = Depends(ouath2_schema)):
-    data = decode_access_token(token)
+    data = decode_access_token(token) 
     
     print(data)
     if data:
@@ -33,6 +33,6 @@ def get_current_user(token: str = Depends(ouath2_schema)):
     else: 
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail='Username y password incorrectos',
+            detail='Access token no valido',
             headers={"WWWW-Autenticate":'Beraer'}
         )
