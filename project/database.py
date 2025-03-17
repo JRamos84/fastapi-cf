@@ -29,6 +29,12 @@ class User(Model):
         return h.hexdigest()
     
     
+    @classmethod
+    def authenticate(cls, username, password):
+        user = cls.select().where(User.usename == username).first()
+        if user and user.password == cls.create_password(password):
+            return user
+    
 
 class Movie(Model):
     title =  CharField(max_length=50)

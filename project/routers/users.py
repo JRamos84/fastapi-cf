@@ -4,7 +4,8 @@ from fastapi import Response, Cookie
 from ..database import User
 from typing import List
 from ..schemas import UserRequestModel, UserResponseModel, ReviewResponseModel
-
+from fastapi import Depends
+from common import ouath2_schema
 router = APIRouter(prefix='/users')
 
 
@@ -41,14 +42,20 @@ async def login(credentials: HTTPBasicCredentials, response: Response):
     return user 
 
 @router.get('/reviews',response_model= List[ReviewResponseModel])
-async def get_reviews(user_id: int = Cookie(None)):
-    user = User.select().where(User.id == user_id).first()
-    if user is None:
-        raise HTTPException(404, "Not found")
-   
-    return [ user_review for user_review in user.reviews]
+async def get_reviews(token: str = Depends(ouath2_schema)):
+    return {
+        'token': token    
+    }
     
 
 
+# @router.get('/reviews',response_model= List[ReviewResponseModel])
+# async def get_reviews(user_id: int = Cookie(None)):
+#     user = User.select().where(User.id == user_id).first()
+#     if user is None:
+#         raise HTTPException(404, "Not found")
+   
+#     return [ user_review for user_review in user.reviews]
+    
 
 
